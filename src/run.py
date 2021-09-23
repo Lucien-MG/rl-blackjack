@@ -1,26 +1,32 @@
-# from agent.human import Agent
-from agent.montecarlo import Agent
+#!/usr/bin/python3
+#‑∗‑ coding: utf‑8 ‑∗‑
+
+from cmd import parse_arguments
 from monitor import Monitor
 from play import RunEnv
 
 import gym
+import importlib
 import numpy as np
 
 def main():
+    # Get arguments
+    args = parse_arguments()
+
     # Create gym environment:
     env = gym.make('Blackjack-v1')
 
     # Create new agent
-    agent = Agent(env.action_space.n)
+    agent_lib = importlib.import_module("agent." + args.agent[0])
+    agent = agent_lib.Agent(env.action_space.n)
 
-    # Create Monitor:
-    monitor = Monitor(env, agent, nb_episodes=1000000)
-    # runEnv = RunEnv(env, agent)
-
-    # runEnv.play()
-
-    # Run agent
-    avg_rewards, best_avg_reward = monitor.interact()
+    # Run the environment:
+    if args.agent[0] == "human":
+        runEnv = RunEnv(env, agent)
+        runEnv.play()
+    else:
+        monitor = Monitor(env, agent, nb_episodes=1000000)
+        avg_rewards, best_avg_reward = monitor.interact()
 
 if __name__ == "__main__":
     # execute only if run as a script

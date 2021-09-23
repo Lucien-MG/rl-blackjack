@@ -7,15 +7,21 @@ import numpy as np
 from collections import deque
 
 class Monitor:
+    """ Initialize the monitoring class.
 
+    Args:
+        env: instance of OpenAI Gym's environment
+        agent: agent that will interact with the environment.
+        nb_episodes: number of episodes of agent-environment interaction
+        window: number of episodes to consider when calculating average rewards.
+
+    Attributes:
+        env: instance of OpenAI Gym's environment
+        agent: agent that will interact with the environment.
+        nb_episodes: number of episodes of agent-environment interaction
+        window: number of episodes to consider when calculating average rewards.
+    """
     def __init__(self, env, agent, nb_episodes=20000, window=100):
-        """ Initialize the monitoring class.
-        Parameters
-        - env: instance of OpenAI Gym's Taxi-v3 environment
-        - agent: agent that will interact with the environment.
-        - nb_episodes: number of episodes of agent-environment interaction
-        - window: number of episodes to consider when calculating average rewards.
-        """
         self.env = env
         self.agent = agent
         self.nb_episodes = nb_episodes
