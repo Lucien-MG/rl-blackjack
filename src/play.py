@@ -7,14 +7,13 @@ import numpy as np
 from collections import deque
 
 class RunEnv:
-
-    def __init__(self, env, agent):
-        """ Initialize the monitoring class.
+    """ Initialize the monitoring class.
         Params
         ======
         - env: instance of OpenAI Gym's Taxi-v3 environment
         - agent: agent that will interact with the environment.
-        """
+    """
+    def __init__(self, env, agent):
         self.env = env
         self.agent = agent
 
@@ -24,7 +23,8 @@ class RunEnv:
         reward = 0
 
         while True:
-            print("State:", state, "|| Reward:", reward)
+            # print("State:", state, "|| Reward:", reward)
+            env.render()
             next_state, reward, done, _ = self.play_step(state)
 
             # update the state (s <- s') to next time step

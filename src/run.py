@@ -17,15 +17,15 @@ def main():
     env = gym.make('Blackjack-v1')
 
     # Create new agent
-    agent_lib = importlib.import_module("agent." + args.agent[0])
+    agent_lib = importlib.import_module("agent." + args.agent)
     agent = agent_lib.Agent(env.action_space.n)
 
     # Run the environment:
-    if args.agent[0] == "human":
+    if args.agent == "human":
         runEnv = RunEnv(env, agent)
         runEnv.play()
     else:
-        monitor = Monitor(env, agent, nb_episodes=1000000)
+        monitor = Monitor(env, agent, nb_episodes=args.episodes)
         avg_rewards, best_avg_reward = monitor.interact()
 
 if __name__ == "__main__":

@@ -6,8 +6,8 @@ import numpy as np
 class Agent:
     """ Initialize agent.
         
-        Args:
-            nb_actions (int): number of actions available to the agent
+    Args:
+        nb_actions (int): number of actions available to the agent
     """
     def __init__(self, nb_actions):
         self.nb_actions = nb_actions

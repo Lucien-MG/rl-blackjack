@@ -49,8 +49,8 @@ class Monitor:
     def interact(self):
         """ Monitor agent's performance.
         Returns
-        - avg_rewards: deque containing average rewards
-        - best_avg_reward: largest value in the avg_rewards deque
+            avg_rewards: deque containing average rewards
+            best_avg_reward: largest value in the avg_rewards deque
         """
         for i_episode in range(1, self.nb_episodes+1):
             # begin the episode

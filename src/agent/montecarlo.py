@@ -7,8 +7,8 @@ from collections import defaultdict, deque
 class Agent:
     """ Initialize agent.
         
-        Args:
-            nb_actions (int): number of actions available to the agent
+    Args:
+        nb_actions (int): number of actions available to the agent
     """
     def __init__(self, nb_actions, epsilon=0.99, alpha=1e-2, gamma=1e-1, min_epsilon=1e-4, epsilon_decay_factor=1e-6):
         self.nb_actions = nb_actions
