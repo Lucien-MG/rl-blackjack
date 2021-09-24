@@ -1,13 +1,13 @@
 #!/usr/bin/python3
 #‑∗‑ coding: utf‑8 ‑∗‑
 
-from cmd import parse_arguments
-from monitor import Monitor
-from play import RunEnv
-
 import gym
 import importlib
 import numpy as np
+
+from utils.cmd import parse_arguments
+from utils.play import RunEnv
+from monitor import Monitor
 
 def main():
     # Get arguments
