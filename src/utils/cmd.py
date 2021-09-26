@@ -12,5 +12,8 @@ def parse_arguments():
     parser.add_argument('-n', metavar='nb_episodes', dest="episodes", type=int,
                     help='Set the number of episodes')
 
+    parser.add_argument('-s', '--save', metavar='filename', dest="filename", type=str,
+                    help='Save the results of the instance')
+
     args = parser.parse_args()
     return args
