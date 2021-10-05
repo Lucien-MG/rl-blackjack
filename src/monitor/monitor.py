@@ -25,6 +25,7 @@ class Monitor:
         self.env = env
         self.agent = agent
         self.nb_episodes = nb_episodes
+        self.window = window
 
         self.avg_rewards = deque(maxlen=nb_episodes)
         self.sample_rewards = deque(maxlen=window)
@@ -32,15 +33,17 @@ class Monitor:
         self.results = {
             "best_average_reward": np.NINF,
             "average_rewards": [],
+            "epsilon": [],
         }
 
     def print_progress(self, i_episode):
         """ Monitor progress.
         """
-        print("\rEpisode: {}/{} || Best average reward: {}".format(i_episode, self.nb_episodes, self.results["best_average_reward"]), end="")
+        print("\rEpisode: {}/{} || Best average reward: {} || Average reward: {}"
+            .format(i_episode + 1, self.nb_episodes, self.results["best_average_reward"], self.results["average_rewards"][-1]), end="")
         sys.stdout.flush()
 
-    def play_step(self, state):
+    def step(self, state):
         action = self.agent.select_action(state)
 
         # agent performs the selected action
@@ -51,32 +54,33 @@ class Monitor:
 
         return next_state, reward, done, info
 
+    def episode(self):
+        # begin the episode
+        state = self.env.reset()
+        # initialize the sampled reward
+        samp_reward = 0
+
+        while True:
+            next_state, reward, done, _ = self.step(state)
+            # update the sampled reward
+            samp_reward += reward
+            # update the state (s <- s') to next time step
+            state = next_state
+
+            if done:
+                # save final sampled reward
+                self.sample_rewards.append(samp_reward)
+                break
+
     def interact(self):
         """ Monitor agent's performance.
         Returns
             results: information of the training score and average results
         """
-        for i_episode in range(1, self.nb_episodes+1):
-            # begin the episode
-            state = self.env.reset()
-            # initialize the sampled reward
-            samp_reward = 0
+        for i_episode in range(0, self.nb_episodes):
+            self.episode()
 
-            while True:
-                next_state, reward, done, _ = self.play_step(state)
-
-                # update the sampled reward
-                samp_reward += reward
-
-                # update the state (s <- s') to next time step
-                state = next_state
-
-                if done:
-                    # save final sampled reward
-                    self.sample_rewards.append(samp_reward)
-                    break
-
-            if (i_episode % 100) == 0:
+            if (i_episode % self.window) == 0:
                 # get average reward from last 100 episodes
                 avg_reward = np.mean(self.sample_rewards)
                 self.results["average_rewards"].append(avg_reward)
@@ -87,7 +91,8 @@ class Monitor:
 
             self.print_progress(i_episode)
 
-            if i_episode == self.nb_episodes:
-                print('\n')
-        
+        print('\n')
+
+        self.results["average_rewards"] = np.array(self.results["average_rewards"])[1:]
+
         return self.results

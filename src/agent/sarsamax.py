@@ -46,14 +46,9 @@ class Agent:
             next_state (obj): the current state of the environment
             done (bool): whether the episode is complete (True or False)
         """
-        self.memory.appendleft((state, action, reward, next_state, done))
 
-        if done:
-            while len(self.memory):
-                state, action, reward, next_state, done = self.memory.pop()
+        target_reward = reward + self.gamma * np.max(self.q_table[next_state])
+        error = target_reward - self.q_table[state][action]
 
-                target_reward = reward + self.gamma * np.mean(self.q_table[next_state])
-                error = target_reward - self.q_table[state][action]
-
-                self.q_table[state][action] += self.alpha * error
-                self.epsilon = max(self.epsilon - self.epsilon_decay_factor, self.min_epsilon)
+        self.q_table[state][action] += self.alpha * error
+        self.epsilon = max(self.epsilon - self.epsilon_decay_factor, self.min_epsilon)
